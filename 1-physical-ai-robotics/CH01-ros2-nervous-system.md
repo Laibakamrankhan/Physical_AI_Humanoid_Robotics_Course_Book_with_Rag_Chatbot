@@ -264,29 +264,136 @@ Each joint also defines an `origin` (its position and orientation relative to th
 
 By chaining links and joints together, complex robot kinematics can be accurately represented. This detailed description is crucial for various ROS 2 functionalities, including visualization in tools like RViz, motion planning, and control.
 
-:::note
-***Required Diagram: Simple robot arm URDF model (Placeholder)***
-
-_A diagram illustrating a simple robot arm (e.g., 2-3 links with revolute joints), clearly labeling each link and joint for URDF reference. This should be a visual representation of the XML structure being described._
-:::
-
-
-:::note
-***Required Code Snippet: Sample URDF snippet for a humanoid joint code snippet (Placeholder)***
-
-_A concise XML snippet demonstrating a simple URDF joint and two links (e.g., a parent link and a child link connected by a revolute joint). The snippet should highlight the `joint` and `link` tags, their attributes (`name`, `type`), and key sub-elements like `origin`, `axis`, and `parent`/`child`.
-:::
+_A diagram illustrating a simple robot arm._
+<img 
+  src="img/Simple robot arm URDF model.png" 
+  alt="Simple robot arm URDF model" 
+  style={{ width: '100%', maxWidth: '600px' }} 
+/>
 
 
-:::note
-***Required Exercise: Extend a basic URDF with additional joints and links (Placeholder)***
+_A concise XML snippet demonstrating a simple URDF joint connecting two links (parent and child)._
 
-_An exercise prompting the user to take a provided base URDF (either the sample snippet or a more complete one from a repository) and extend it. This extension could involve:
-- Adding a new link (e.g., a gripper, a sensor).
-- Connecting it with a new joint (e.g., another revolute or prismatic joint).
-- Modifying existing joint limits.
-- Updating visual or collision properties._
-:::
+```xml
+<?xml version="1.0"?>
+<robot name="humanoid_example">
+
+  <!-- Parent Link -->
+  <link name="torso">
+    <visual>
+      <geometry>
+        <box size="0.3 0.2 0.5"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <!-- Child Link -->
+  <link name="upper_arm">
+    <visual>
+      <geometry>
+        <cylinder length="0.3" radius="0.05"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+
+  <!-- Revolute Joint connecting torso to upper_arm -->
+  <joint name="shoulder_joint" type="revolute">
+    <!-- Position and orientation of the joint relative to parent link -->
+    <origin xyz="0.15 0 0.25" rpy="0 0 0"/>
+    
+    <!-- Parent and Child links -->
+    <parent link="torso"/>
+    <child link="upper_arm"/>
+    
+    <!-- Axis of rotation for revolute joint -->
+    <axis xyz="0 0 1"/>
+    
+    <!-- Joint limits (optional) -->
+    <limit lower="-1.57" upper="1.57" effort="50" velocity="1.0"/>
+  </joint>
+
+</robot>
+```
+_Required Exercise: Extend a basic URDF with additional joints and links._
+```xml
+<?xml version="1.0"?>
+<robot name="simple_arm">
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.2 0.2 0.1"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.2 0.2 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <!-- Existing Joint: Base to Link1 -->
+  <link name="link1">
+    <visual>
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57" upper="1.57" effort="10" velocity="1.0"/>
+  </joint>
+
+  <!-- NEW LINK: Gripper -->
+  <link name="gripper">
+    <visual>
+      <geometry>
+        <box size="0.1 0.02 0.05"/>
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 0.02 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- NEW JOINT: Link1 to Gripper -->
+  <joint name="gripper_joint" type="revolute">
+    <parent link="link1"/>
+    <child link="gripper"/>
+    <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.5" upper="0.5" effort="5" velocity="0.5"/>
+  </joint>
+
+</robot>
+```
 
 ## 1.5 Launching and Debugging ROS 2 Systems
 

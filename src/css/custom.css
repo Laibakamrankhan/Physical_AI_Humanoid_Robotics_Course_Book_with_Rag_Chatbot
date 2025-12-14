@@ -239,3 +239,13 @@
   .module-grid { grid-template-columns: 1fr; }
   .hero-text h1 { font-size: 1.8rem; }
 }
+
+html[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] input,
+html[dir="rtl"] button {
+  text-align: right;
+}

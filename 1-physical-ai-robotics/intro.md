@@ -1,3 +1,7 @@
+---
+id: intro
+title: Introduction
+---
 # Welcome to Embodied Intelligence: Physical AI & Humanoid Robotics
 
 This book serves as a comprehensive guide to the exciting and rapidly evolving field of **Embodied Intelligence**, focusing specifically on **Physical AI and Humanoid Robotics**. Our objective is to provide detailed, chapter-level specifications that are not only academically rigorous but also practically applicable.

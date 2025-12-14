@@ -9,7 +9,7 @@ import '../css/custom.css';
 
 export default function Home() {
 return (
-<Layout title="Embodied Intelligence: Physical AI in Action" description="Book: Physical AI & Humanoid Robotics">
+<Layout title="Physical AI & Humanoid Robotics" description="Book: Physical AI & Humanoid Robotics">
 <main className="homepage-root">
 <HeroSection />
 

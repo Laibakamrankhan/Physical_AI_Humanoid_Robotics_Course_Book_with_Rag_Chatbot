@@ -14,17 +14,11 @@ A **digital twin** in robotics is a virtual model designed to accurately reflect
 -   **Remote Monitoring and Diagnostics**: Monitor the health and performance of a physical robot by comparing its real-time data with the digital twin's predictions, enabling predictive maintenance and anomaly detection.
 -   **Human-Robot Interaction (HRI) Development**: Develop and test human-robot interfaces in a controlled virtual space, optimizing interaction flows and user experience before deployment to physical systems.
 
-:::note
-***Required Diagram: Digital Twin Ecosystem (Placeholder)***
-
-_A diagram illustrating the core components of a digital twin ecosystem for robotics. This should include:
-- A physical robot/system.
-- A virtual counterpart (digital twin).
-- Data flow from physical to virtual (sensors, telemetry).
-- Data flow from virtual to physical (commands, control).
-- AI/ML models interacting with the digital twin.
-- Key elements like simulation platform, data analytics, and visualization._
-:::
+<img 
+  src="img/digital-twin-ecosystem.png" 
+  alt="Digital Twin Ecosystem" 
+  style={{ width: '100%', maxWidth: '600px' }} 
+/>
 
 
 ### 2.1.2 Overview of Simulation Platforms
@@ -192,18 +186,12 @@ Unity is an excellent platform for **synthetic data generation**, which is criti
 
 Generating high-quality synthetic data in Unity can significantly accelerate the development and training of AI models for humanoid robots, particularly for perception and manipulation tasks.
 
-:::note
-***Required Diagram: Workflow for HRI simulation in Unity ***
-
-_A diagram illustrating a typical workflow for Human-Robot Interaction (HRI) simulation using Unity. This should include:_
--   Unity Editor/Simulation Environment.
--   ROS 2 Network (e.g., `ros_tcp_endpoint`).
--   Human interface (e.g., VR/AR headset, haptic feedback device, or a simple GUI).
--   Robot model (e.g., URDF imported as Articulation Bodies).
--   Data flow for human input to robot commands.
--   Data flow for robot state/sensor feedback to human interface.
--   Integration with AI/ML models for robot autonomy or perception._
-:::
+_Workflow for HRI simulation in Unity._
+<img 
+  src="img/Workflow for HRI simulation in Unity.png" 
+  alt="Digital Twin Ecosystem" 
+  style={{ width: '100%', maxWidth: '600px' }} 
+/>
 
 ## 2.4 Sim-to-Real Considerations
 

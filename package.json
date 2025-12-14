@@ -15,16 +15,23 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.71.2",
     "@docusaurus/core": "3.9.2",
     "@docusaurus/preset-classic": "3.9.2",
+    "@docusaurus/theme-common": "^3.9.2",
     "@heroicons/react": "^2.2.0",
     "@mdx-js/react": "^3.1.1",
+    "better-auth": "^1.4.6",
     "clsx": "^2.0.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "framer-motion": "^12.23.26",
     "lottie-react": "^2.4.1",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-lottie": "^1.2.10",
+    "react-markdown": "^10.1.0",
     "react-tsparticles": "^2.12.2",
     "tsparticles": "^3.9.1"
   },
