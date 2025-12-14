@@ -19,7 +19,7 @@ export default function HeroSection() {
               <Link to="intro" className="btn btn-primary">
                 Start Learning
               </Link>
-              <Link to="/signup" className="btn btn-ghost">
+              <Link to="/" className="btn btn-ghost">
                 Sign Up
               </Link>
             </div>

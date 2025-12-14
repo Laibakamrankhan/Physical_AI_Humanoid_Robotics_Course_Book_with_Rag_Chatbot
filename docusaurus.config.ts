@@ -39,6 +39,9 @@ const config: Config = {
       theme: { customCss: './src/css/custom.css' },
     } satisfies Preset.Options],
   ],
+  scripts: [
+    '/chatApiConfig.js', // This loads our API configuration
+  ],
 
   themeConfig: {
     image: 'img/docusaurus-social-card.jpg',
