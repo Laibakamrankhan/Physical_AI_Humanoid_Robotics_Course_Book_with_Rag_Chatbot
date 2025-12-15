@@ -17,6 +17,9 @@ RUN pip install --no-cache-dir "fastapi[all]" "uvicorn[standard]"
 # Copy the application code
 COPY . .
 
+# Verify files are copied correctly
+RUN ls -la /app
+
 # Expose port
 EXPOSE 8000
 
