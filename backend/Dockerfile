@@ -14,23 +14,31 @@ RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirement.txt
 RUN pip install --no-cache-dir "fastapi[all]" "uvicorn[standard]"
 
-# Ensure uvicorn is available in PATH
-RUN pip install --no-cache-dir --force-reinstall "uvicorn[standard]"
-
 # Copy the application code
 COPY . .
-
-# Verify installations
-RUN python -c "import fastapi; print(f'FastAPI version: {fastapi.__version__}')"
-RUN python -c "import uvicorn; print(f'Uvicorn version: {uvicorn.__version__}')"
-RUN python -c "import api; print('API module imported successfully')"
-
-# Verify uvicorn command is available
-RUN which uvicorn || echo "uvicorn not in PATH"
-RUN python -m pip show uvicorn
 
 # Expose port
 EXPOSE 8000
 
-# Run the application using uvicorn directly (now it should be available)
-CMD ["sh", "-c", "uvicorn api:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Create a startup script with proper error handling
+RUN echo '#!/bin/sh\n\
+set -e\n\
+echo "Starting Physical AI Humanoid Robotics Backend"\n\
+echo "Available on port: ${PORT:-8000}"\n\
+echo "Environment variables check:"\n\
+echo "  COHERE_API_KEY set: $(if [ -n "$COHERE_API_KEY" ]; then echo "yes"; else echo "no"; fi)"\n\
+echo "  QDRANT_URL set: $(if [ -n "$QDRANT_URL" ]; then echo "yes"; else echo "no"; fi)"\n\
+\n\
+# Run the application\n\
+exec python -c "\n\
+import os, uvicorn, sys\n\
+from api import app\n\
+\n\
+port = int(os.environ.get(\"PORT\", 8000))\n\
+print(f\"Starting server on port {port}\")\n\
+uvicorn.run(app, host=\"0.0.0.0\", port=port, log_level=\"info\")\n\
+"' > /start_server.sh
+RUN chmod +x /start_server.sh
+
+# Run the application using the startup script
+CMD ["/start_server.sh"]
