@@ -20,7 +20,7 @@ COPY . .
 # Expose port
 EXPOSE 8000
 
-# Create a startup script with proper error handling
+# Create a startup script with proper error handling and Python path
 RUN echo '#!/bin/sh\n\
 set -e\n\
 echo "Starting Physical AI Humanoid Robotics Backend"\n\
