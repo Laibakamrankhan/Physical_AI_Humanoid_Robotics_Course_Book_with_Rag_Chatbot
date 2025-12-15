@@ -20,12 +20,11 @@ COPY . .
 # Expose port
 EXPOSE 8000
 
-# Create a startup script to ensure proper execution
+# Create a startup script to properly handle environment variables
 RUN echo '#!/bin/bash\n\
 set -e\n\
-echo "Starting application..."\n\
-python -c "import uvicorn; print(uvicorn.__version__)"\n\
-exec uvicorn api:app --host 0.0.0.0 --port ${PORT:-8000}' > /start.sh
+echo "Starting application on port ${PORT:-8000}"\n\
+python -c "import uvicorn; uvicorn.run(\"api:app\", host=\"0.0.0.0\", port=int(\"${PORT:-8000}\"), log_level=\"info\")"' > /start.sh
 RUN chmod +x /start.sh
 
 # Run the application
