@@ -1,11 +1,11 @@
 # Railway Configuration File
 
 [build]
-builder = "dockerfile"
-dockerfilePath = "Dockerfile"
+builder = "DOCKERFILE"
+dockerfilePath = "./Dockerfile"
 
 [deploy]
-startCommand = ""  # Use CMD from Dockerfile
+startCommand = ""  # Use CMD from Dockerfile (empty means use Dockerfile CMD)
 healthCheckPath = "/health"
 healthCheckTimeout = 300
 restartPolicyType = "on-failure"
