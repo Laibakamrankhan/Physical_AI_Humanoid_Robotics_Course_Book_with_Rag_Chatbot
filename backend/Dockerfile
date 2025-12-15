@@ -34,9 +34,10 @@ RUN printf '%s\n' \
 'sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))' \
 '' \
 'print("Starting Physical AI Humanoid Robotics Backend")' \
-'print(f"Available on port: {os.environ.get(\"PORT\", 8000)}")' \
-'print(f"COHERE_API_KEY set: {\"yes\" if os.environ.get(\"COHERE_API_KEY\") else \"no\"}")' \
-'print(f"QDRANT_URL set: {\"yes\" if os.environ.get(\"QDRANT_URL\") else \"no\"}")' \
+'port = os.environ.get("PORT", 8000)' \
+'print(f"Available on port: {port}")' \
+'print(f"COHERE_API_KEY set: {"yes" if os.environ.get("COHERE_API_KEY") else "no"}")' \
+'print(f"QDRANT_URL set: {"yes" if os.environ.get("QDRANT_URL") else "no"}")' \
 '' \
 '# Import and run the application' \
 'try:' \
