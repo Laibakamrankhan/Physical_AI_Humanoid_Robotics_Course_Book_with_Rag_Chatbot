@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
 # Copy requirements and install Python dependencies
 COPY requirement.txt .
 RUN pip install --no-cache-dir -r requirement.txt
+RUN pip install --no-cache-dir --upgrade pip
 
 # Install FastAPI and uvicorn
 RUN pip install "fastapi[all]" uvicorn
