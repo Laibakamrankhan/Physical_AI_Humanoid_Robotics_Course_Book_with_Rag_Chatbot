@@ -36,8 +36,10 @@ RUN printf '%s\n' \
 'print("Starting Physical AI Humanoid Robotics Backend")' \
 'port = os.environ.get("PORT", 8000)' \
 'print(f"Available on port: {port}")' \
-'print(f"COHERE_API_KEY set: {"yes" if os.environ.get("COHERE_API_KEY") else "no"}")' \
-'print(f"QDRANT_URL set: {"yes" if os.environ.get("QDRANT_URL") else "no"}")' \
+'cohere_set = "yes" if os.environ.get("COHERE_API_KEY") else "no"' \
+'qdrant_set = "yes" if os.environ.get("QDRANT_URL") else "no"' \
+'print(f"COHERE_API_KEY set: {cohere_set}")' \
+'print(f"QDRANT_URL set: {qdrant_set}")' \
 '' \
 '# Import and run the application' \
 'try:' \
