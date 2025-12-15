@@ -25,14 +25,20 @@ RUN python -c "import api; print('API module imported successfully')"
 # Expose port
 EXPOSE 8000
 
-# Create a startup script
-RUN echo '#!/bin/sh\n\
-echo "Starting application on port ${PORT:-8000}"\n\
-echo "Available Python packages:"\n\
-pip list | grep -i uvicorn\n\
-python -c "import sys; print(sys.path)"\n\
-exec python -c "import uvicorn, os; uvicorn.run(\"api:app\", host=\"0.0.0.0\", port=int(os.environ.get(\"PORT\", 8000)), log_level=\"info")"' > /start.sh
-RUN chmod +x /start.sh
+# Create a startup script that Railway can execute directly
+RUN echo '#!/usr/bin/env python3\n\
+import os\n\
+import uvicorn\n\
+from api import app\n\n\
+if __name__ == "__main__":\n\
+    port = int(os.environ.get("PORT", 8000))\n\
+    print(f"Starting server on port {port}")\n\
+    uvicorn.run(\n\
+        "api:app",\n\
+        host="0.0.0.0",\n\
+        port=port,\n\
+        log_level="info"\n\
+    )' > /app/start_server.py
 
-# Run the application
-CMD ["/start.sh"]
+# Run the application using Python directly
+CMD ["python", "/app/start_server.py"]
