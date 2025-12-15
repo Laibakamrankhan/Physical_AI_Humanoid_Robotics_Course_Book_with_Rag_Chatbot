@@ -5,7 +5,7 @@ builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "uvicorn api:app --host 0.0.0.0 --port ${PORT:-8000}"
+startCommand = ""  # Use CMD from Dockerfile
 healthCheckPath = "/health"
 healthCheckTimeout = 300
 restartPolicyType = "on-failure"
