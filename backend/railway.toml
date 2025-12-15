@@ -8,5 +8,3 @@ dockerfilePath = "./Dockerfile"
 startCommand = ""  # Use CMD from Dockerfile (empty means use Dockerfile CMD)
 healthCheckPath = "/health"
 healthCheckTimeout = 300
-restartPolicyType = "on-failure"
-restartPolicyMaxRetries = 3
