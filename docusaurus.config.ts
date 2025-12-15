@@ -7,7 +7,7 @@ const config: Config = {
   favicon: 'img/robo.png',
   future: { v4: true },
   url: 'https://laibakamrankhan.github.io',
-  baseUrl: '/Physical_AI_Humanoid_Robotics_Book/',
+  baseUrl: '/',
   organizationName: 'Laibakamrankhan',
   projectName: 'Physical_AI_Humanoid_Robotics_Book',
   deploymentBranch: 'gh-pages',
