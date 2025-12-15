@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies
-COPY requirement.txt .
+COPY backend/requirement.txt .
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirement.txt
 RUN pip install --no-cache-dir "fastapi[all]" "uvicorn[standard]"
