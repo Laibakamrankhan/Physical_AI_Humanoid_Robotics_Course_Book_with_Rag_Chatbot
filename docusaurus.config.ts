@@ -61,7 +61,7 @@ const config: Config = {
             { label: 'Module 4 — VLA', to: 'Modules/module4-contract' },
           ],
         },
-        { href: 'https://github.com/your-github-username/Physical_AI_Humanoid_Robotics_Course', label: 'GitHub', position: 'right' },
+        { href: 'https://github.com/Laibakamrankhan/Physical_AI_Humanoid_Robotics_Course_Book_with_Rag_Chatbot', label: 'GitHub', position: 'right' },
      ],
     },
     footer: {
@@ -73,7 +73,7 @@ const config: Config = {
           ]
         },
         { title: 'More', items: [
-            { label: 'GitHub', href: 'https://github.com/your-github-username/Physical_AI_Humanoid_Robotics_Course' },
+            { label: 'GitHub', href: 'https://github.com/Laibakamrankhan/Physical_AI_Humanoid_Robotics_Course_Book_with_Rag_Chatbot' },
           ]
         },
       ],
