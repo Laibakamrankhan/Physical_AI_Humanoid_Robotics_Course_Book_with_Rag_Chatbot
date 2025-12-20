@@ -31,8 +31,6 @@ An AI-native, interactive textbook designed for the **Physical AI and Humanoid R
 
 ❤️ Credits
 Developed as part of the GIAIC Hackathon initiative to modernize robotics education.
-[Physical AI & Humanoid Robotics Overview](https://www.youtube.com/watch?v=sTiUFr_Mt5U)
-
-This video provides a complete walkthrough of the Physical AI and Humanoid Robotics book, detailing the curriculum and the AI-native features that align with your project's goals.
-http://googleusercontent.com/youtube_content/0
+This video provides a complete walkthrough of the Physical AI and Humanoid Robotics book, detailing the curriculum and the AI-native features that align with project's goals.
+[Physical AI & Humanoid Robotics Overview](https://youtu.be/ZeVI-0ciVLI?si=aLGWSRftb71IXnDu)
 
