@@ -1,8 +1,13 @@
+// Ensure these are set globally before frontend runs (e.g., in docusaurus.config.js)
+if (typeof window !== 'undefined') {
+  window.chatApiBaseUrl = 'https://physicalaihumanoidroboticscoursebookwithr-production.up.railway.app';
+  window.chatApiKey = 'YOUR_BACKEND_KEY_HERE'; // Replace with your actual key
+}
+
 // API client for the RAG chatbot
-// Using a global variable that can be configured in docusaurus.config.js or default local backend URL
 const API_BASE_URL = typeof window !== 'undefined' && window.chatApiBaseUrl
   ? window.chatApiBaseUrl
-  : 'http://localhost:8000';
+  : 'https://physicalaihumanoidroboticscoursebookwithr-production.up.railway.app';
 
 class ChatAPI {
   constructor() {
@@ -15,7 +20,7 @@ class ChatAPI {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          "Authorization": `Bearer ${process.env.REACT_APP_API_KEY}`,
+          "Authorization": `Bearer ${typeof window !== 'undefined' ? window.chatApiKey : ''}`,
         },
         body: JSON.stringify({
           message,
@@ -35,13 +40,13 @@ class ChatAPI {
     }
   }
 
-  // Streaming chat method (to be used when backend supports streaming)
   async chatStream(message, sessionId = null, documentContext = null, onToken) {
     try {
       const response = await fetch(`${this.baseURL}/chat/stream`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          "Authorization": `Bearer ${typeof window !== 'undefined' ? window.chatApiKey : ''}`,
         },
         body: JSON.stringify({
           message,
@@ -64,21 +69,18 @@ class ChatAPI {
 
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split('\n');
-        buffer = lines.pop(); // Keep last incomplete line in buffer
+        buffer = lines.pop();
 
         for (const line of lines) {
           if (line.startsWith('data: ')) {
-            const data = line.slice(6); // Remove 'data: ' prefix
-            if (data === '[DONE]') {
-              return; // Stream ended
-            }
+            const data = line.slice(6);
+            if (data === '[DONE]') return;
 
             try {
               const parsed = JSON.parse(data);
               if (parsed.type === 'token') {
                 onToken(parsed.token);
               } else if (parsed.type === 'sources') {
-                // Handle sources data
                 onToken({ type: 'sources', data: parsed.data });
               }
             } catch (e) {
@@ -99,6 +101,7 @@ class ChatAPI {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          "Authorization": `Bearer ${typeof window !== 'undefined' ? window.chatApiKey : ''}`,
         },
         body: JSON.stringify({
           force_reindex: forceReindex,
@@ -119,7 +122,11 @@ class ChatAPI {
 
   async healthCheck() {
     try {
-      const response = await fetch(`${this.baseURL}/health`);
+      const response = await fetch(`${this.baseURL}/health`, {
+        headers: {
+          "Authorization": `Bearer ${typeof window !== 'undefined' ? window.chatApiKey : ''}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`API error: ${response.status} - ${response.statusText}`);
@@ -128,7 +135,6 @@ class ChatAPI {
       return await response.json();
     } catch (error) {
       console.error('Health check error:', error);
-      // Return a mock health response in case of network error
       if (error.message.includes('fetch')) {
         return { status: 'unreachable', message: 'API server is not reachable' };
       }
@@ -137,7 +143,6 @@ class ChatAPI {
   }
 }
 
-// Create a singleton instance
+// Singleton
 const chatAPI = new ChatAPI();
-
 export default chatAPI;
