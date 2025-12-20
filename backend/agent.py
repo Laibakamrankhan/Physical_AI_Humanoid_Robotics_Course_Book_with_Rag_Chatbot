@@ -14,7 +14,6 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 def retrieve_information(query: str) -> Dict:
     """
     Retrieve information from the knowledge base based on a query
@@ -51,7 +50,6 @@ def retrieve_information(query: str) -> Dict:
             'error': str(e)
         }
 
-
 class RAGAgent:
     def __init__(self):
         logger.info("RAG Agent initialized without OpenAI API (using local retrieval and rule-based responses)")
@@ -59,6 +57,7 @@ class RAGAgent:
     def query_agent(self, query_text: str) -> Dict:
         """
         Process a query through the RAG agent and return structured response
+        without including sources in the answer.
         """
         start_time = time.time()
         logger.info(f"Processing query through RAG agent: '{query_text[:50]}...'")
@@ -70,39 +69,61 @@ class RAGAgent:
 
             # Format the context from retrieved information
             context_str = "\n\n".join([f"Source: {chunk['url']}\nContent: {chunk['content']}"
-                                        for chunk in retrieved_chunks])
+                                     for chunk in retrieved_chunks])
 
             # Generate a response based on the retrieved context
             if context_str:
-                # Extract key info from top chunk only
-                top_chunk = retrieved_chunks[0] if retrieved_chunks else None
-                if top_chunk:
-                    content = top_chunk['content']
+                relevant_chunks = retrieved_chunks[:2]
+                concise_parts = []
+
+                for chunk in relevant_chunks:
+                    content = chunk['content']
                     clean_content = re.sub(r'^#+\s+', '', content, flags=re.MULTILINE)
                     clean_content = re.sub(r'\n\d+\.\d*\.?\s+', '\n', clean_content)
                     clean_content = re.sub(r'\n\s*-\s+', '\n• ', clean_content)
 
-                    sentences = [s.strip() for s in clean_content.split('.') if len(s.strip()) > 10]
-                    query_words = query_text.lower().split()[:3]
+                    sentences = clean_content.split('.')
+                    query_lower = query_text.lower()
+                    relevant_sentences = []
 
-                    # Pick the first relevant sentence containing any query word
-                    answer_sentence = next((s for s in sentences if any(q in s.lower() for q in query_words)),
-                                           sentences[0] if sentences else "")
-                    if len(answer_sentence) > 200:
-                        answer_sentence = answer_sentence[:200] + "..."
+                    for sentence in sentences:
+                        clean_sentence = sentence.strip()
+                        if len(clean_sentence) < 10:
+                            continue
+                        if any(header in clean_sentence for header in ['#', '##', '###', 'Chapter', 'Section', 'Module']):
+                            continue
+                        if any(term in clean_sentence.lower() for term in query_lower.split()[:3]):
+                            relevant_sentences.append(clean_sentence)
 
-                    answer = f"Based on the book content: {answer_sentence}"
+                    if relevant_sentences:
+                        selected = '. '.join(relevant_sentences[:2]) + '.'
+                        if len(selected) > 250:
+                            selected = selected[:250] + "..."
+                        concise_parts.append(selected.strip())
+
+                if concise_parts:
+                    answer = "Based on the book content: " + " ".join(concise_parts[:2])
                 else:
-                    answer = "I couldn't find relevant information in the knowledge base."
+                    most_relevant = retrieved_chunks[0]['content'] if retrieved_chunks else ""
+                    clean_content = re.sub(r'^#+\s+', '', most_relevant, flags=re.MULTILINE)
+                    clean_content = re.sub(r'\n\d+\.\d*\.?\s+', '\n', clean_content)
+                    paragraphs = [p.strip() for p in clean_content.split('\n') if p.strip()]
+                    for paragraph in paragraphs:
+                        if len(paragraph) > 50 and not any(header in paragraph for header in ['#', '##', '###', 'Chapter', 'Section', 'Module']):
+                            if len(paragraph) > 300:
+                                paragraph = paragraph[:300] + "..."
+                            answer = f"Based on the book content: {paragraph}"
+                            break
+                    else:
+                        first_part = clean_content[:200] + "..." if len(clean_content) > 200 else clean_content
+                        answer = f"Based on the book content: {first_part}"
             else:
-                answer = "I couldn't find relevant information in the knowledge base."
+                answer = "I couldn't find relevant information in the knowledge base to answer your question."
 
-            sources = list(set([chunk['url'] for chunk in retrieved_chunks if chunk['url']]))
             query_time_ms = (time.time() - start_time) * 1000
 
             return {
                 "answer": answer,
-                "sources": sources,
                 "matched_chunks": retrieved_chunks,
                 "query_time_ms": query_time_ms,
                 "confidence": self._calculate_confidence(retrieved_chunks)
@@ -112,7 +133,6 @@ class RAGAgent:
             logger.error(f"Error processing query: {e}")
             return {
                 "answer": "Sorry, I encountered an error processing your request.",
-                "sources": [],
                 "matched_chunks": [],
                 "error": str(e),
                 "query_time_ms": (time.time() - start_time) * 1000
@@ -129,11 +149,9 @@ class RAGAgent:
         else:
             return "low"
 
-
 def query_agent(query_text: str) -> Dict:
     agent = RAGAgent()
     return agent.query_agent(query_text)
-
 
 def main():
     logger.info("Initializing RAG Agent...")
@@ -151,22 +169,16 @@ def main():
         print("-" * 30)
         response = agent.query_agent(query)
         print(f"Answer: {response['answer']}")
-        if response.get('sources'):
-            print(f"Sources: {len(response['sources'])} documents")
-            for source in response['sources'][:3]:
-                print(f"  - {source}")
         if response.get('matched_chunks'):
             print(f"Matched chunks: {len(response['matched_chunks'])}")
             for j, chunk in enumerate(response['matched_chunks'][:2], 1):
                 content_preview = chunk['content'][:100] + "..." if len(chunk['content']) > 100 else chunk['content']
                 print(f"  Chunk {j}: {content_preview}")
-                print(f"    Source: {chunk['url']}")
                 print(f"    Score: {chunk['similarity_score']:.3f}")
         print(f"Query time: {response['query_time_ms']:.2f}ms")
         print(f"Confidence: {response.get('confidence', 'unknown')}")
         if i < len(test_queries):
             time.sleep(1)
-
 
 if __name__ == "__main__":
     main()
