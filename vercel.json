@@ -22,7 +22,7 @@
     }
   ],
   "env": {
-    "REACT_APP_API_URL": "$BACKEND_API_URL"
+    "REACT_APP_API_URL": "https://physicalaihumanoidroboticscoursebookwithr-production.up.railway.app/"
   },
   "github": {
     "enabled": true,
