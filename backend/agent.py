@@ -14,6 +14,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def retrieve_information(query: str) -> Dict:
     """
     Retrieve information from the knowledge base based on a query
@@ -50,6 +51,7 @@ def retrieve_information(query: str) -> Dict:
             'error': str(e)
         }
 
+
 class RAGAgent:
     def __init__(self):
         logger.info("RAG Agent initialized without OpenAI API (using local retrieval and rule-based responses)")
@@ -68,29 +70,32 @@ class RAGAgent:
 
             # Format the context from retrieved information
             context_str = "\n\n".join([f"Source: {chunk['url']}\nContent: {chunk['content']}"
-                                     for chunk in retrieved_chunks])
+                                        for chunk in retrieved_chunks])
 
             # Generate a response based on the retrieved context
-           if context_str:
-    # Extract key info from top chunk only
-    top_chunk = retrieved_chunks[0] if retrieved_chunks else None
-    if top_chunk:
-        content = top_chunk['content']
-        clean_content = re.sub(r'^#+\s+', '', content, flags=re.MULTILINE)
-        clean_content = re.sub(r'\n\d+\.\d*\.?\s+', '\n', clean_content)
-        clean_content = re.sub(r'\n\s*-\s+', '\n• ', clean_content)
+            if context_str:
+                # Extract key info from top chunk only
+                top_chunk = retrieved_chunks[0] if retrieved_chunks else None
+                if top_chunk:
+                    content = top_chunk['content']
+                    clean_content = re.sub(r'^#+\s+', '', content, flags=re.MULTILINE)
+                    clean_content = re.sub(r'\n\d+\.\d*\.?\s+', '\n', clean_content)
+                    clean_content = re.sub(r'\n\s*-\s+', '\n• ', clean_content)
 
-        sentences = [s.strip() for s in clean_content.split('.') if len(s.strip()) > 10]
-        query_words = query_text.lower().split()[:3]
+                    sentences = [s.strip() for s in clean_content.split('.') if len(s.strip()) > 10]
+                    query_words = query_text.lower().split()[:3]
 
-        # Pick the first relevant sentence containing any query word
-        answer_sentence = next((s for s in sentences if any(q in s.lower() for q in query_words)), sentences[0] if sentences else "")
-        if len(answer_sentence) > 200:
-            answer_sentence = answer_sentence[:200] + "..."
+                    # Pick the first relevant sentence containing any query word
+                    answer_sentence = next((s for s in sentences if any(q in s.lower() for q in query_words)),
+                                           sentences[0] if sentences else "")
+                    if len(answer_sentence) > 200:
+                        answer_sentence = answer_sentence[:200] + "..."
 
-        answer = f"Based on the book content: {answer_sentence}"
-    else:
-        answer = "I couldn't find relevant information in the knowledge base."
+                    answer = f"Based on the book content: {answer_sentence}"
+                else:
+                    answer = "I couldn't find relevant information in the knowledge base."
+            else:
+                answer = "I couldn't find relevant information in the knowledge base."
 
             sources = list(set([chunk['url'] for chunk in retrieved_chunks if chunk['url']]))
             query_time_ms = (time.time() - start_time) * 1000
@@ -124,9 +129,11 @@ class RAGAgent:
         else:
             return "low"
 
+
 def query_agent(query_text: str) -> Dict:
     agent = RAGAgent()
     return agent.query_agent(query_text)
+
 
 def main():
     logger.info("Initializing RAG Agent...")
@@ -159,6 +166,7 @@ def main():
         print(f"Confidence: {response.get('confidence', 'unknown')}")
         if i < len(test_queries):
             time.sleep(1)
+
 
 if __name__ == "__main__":
     main()
