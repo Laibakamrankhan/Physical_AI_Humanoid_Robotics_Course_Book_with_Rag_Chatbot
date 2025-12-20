@@ -1,7 +1,7 @@
 # Physical AI & Humanoid Robotics Course Book with RAG Chatbot
 
 ![Vercel Status](https://img.shields.io/badge/Vercel-Live-brightgreen)
-![Tech Stack](https://img.shields.io/badge/Tech-FastAPI%20%7C%20Docusaurus%20%7C%20Gemini-blue)
+![Tech Stack](https://img.shields.io/badge/Tech-FastAPI%20%7C%20Docusaurus%20%7C%20claude-blue)
 
 An AI-native, interactive textbook designed for the **Physical AI and Humanoid Robotics** course. This platform combines high-quality educational content with an intelligent RAG (Retrieval-Augmented Generation) chatbot to provide a personalized learning experience.
 
@@ -12,16 +12,13 @@ An AI-native, interactive textbook designed for the **Physical AI and Humanoid R
 - **Interactive Textbook:** 6 comprehensive chapters covering the evolution from Digital AI to Physical Embodied Intelligence.
 - **AI RAG Assistant:** A context-aware chatbot powered by **Google Gemini** and **Qdrant Vector DB** that answers questions strictly from the book content.
 - **Multilingual Support:** Seamlessly switch between English and Urdu with dynamic RTL layout support.
-- **Audio Lessons:** AI-narrated chapters for students who prefer listening over reading.
-- **Personalized Learning:** Includes an onboarding quiz to tailor content for "Novice" or "Professional" modes.
-- **Research Updates:** Fetches real-time advancements in humanoid robotics to keep the content fresh.
 
 ## 🏗️ Tech Stack
 - **Frontend:** [Docusaurus](https://docusaurus.io/) (React-based documentation framework)
 - **Styling:** TailwindCSS
 - **Backend:** Python (FastAPI)
 - **Database:** [Neon](https://neon.tech/) (Postgres) & [Qdrant](https://qdrant.tech/) (Vector Search)
-- **AI Model:** Google Gemini API
+- **AI Model:** Claude Code
 
 ## 📖 Course Curriculum
 1. **Introduction to Physical AI:** The shift from LLMs to Embodied AI.
