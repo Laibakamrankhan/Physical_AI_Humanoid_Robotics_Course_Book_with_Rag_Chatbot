@@ -8,7 +8,7 @@ const getApiBaseUrl = () => {
   }
 
   // For development, use environment variable or default to localhost
-  return window.chatApiBaseUrl || process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  return window.chatApiBaseUrl || process.env.REACT_APP_API_URL || 'https://physicalaihumanoidroboticscoursebookwithr-production.up.railway.app/';
 };
 
 window.chatApiBaseUrl = getApiBaseUrl();
